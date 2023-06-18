@@ -8,32 +8,32 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1>Auctions</h1>
-        <div>
+        <div id="Header-flex">
+            <div id="img-div"><img src="{% static 'auctions/AuctionHub.png' %}" id="logo-auctionhub"></div>
             {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
+                <a class="navlink hidden" href="">Log In</a>
+                <a class="navlink" href="{% url 'logout' %}">Log Out</a>
             {% else %}
-                Not signed in.
+                <a class="navlink" href="{% url 'login' %}">Log In</a>
+                <a class="navlink" href="{% url 'register' %}">Register</a>
             {% endif %}
         </div>
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
+        <div id="user-status">
+            <div>
+                {% if user.is_authenticated %}
+                    Welcome <strong>{{ user.username }}</strong>.
+                {% else %}
+                    Not signed in.
+                {% endif %}
+            </div>
+        </div>
+        <div id="navigation-flex">
+            <a href="{% url 'index' %}">Active Listings</a>
+            <a href="{% url 'index' %}">Categories</a>
+            <a href="{% url 'index' %}">WatchList</a>
+            <a href="{% url 'index' %}">Create Listings</a>
+            <a href="{% url 'index' %}">Previous Listings</a>
+        </div>
         {% block body %}
         {% endblock %}
     </body>
