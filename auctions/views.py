@@ -3,12 +3,19 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from django import forms
+from .models import *
+from decimal import Decimal
 from .models import User
 
-
 def index(request):
-    return render(request, "auctions/index.html")
+    message = ''
+    if 'message' in request.GET:
+        message = request.GET.get('message')
+    return render(request, "auctions/index.html", {
+        "Message" : message,
+        "Items" : Items.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +68,33 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def createListings(request):
+    if request.method == "POST":
+        title = request.POST["title"]
+        description = request.POST["description"]
+        image = request.POST["image"]
+        startingPrice = request.POST["startingPrice"]
+        category = request.POST["category"].strip().lower()
+        print(category)
+        user = request.user
+        user = User.objects.get(username=user)
+
+        if not title or not description or not image or not startingPrice or not category:
+            message = "Error Creating Listing: Details Missing"
+        elif not (isinstance(title, str) and isinstance(description, str) and isinstance(startingPrice, Decimal)):
+            message = "Error Creating Listing: Illegal Details Submitted"
+        else:
+            listing = Items(Title=title, Description=description, Image=image, Starting_price=startingPrice, Seller=user, Category=category)
+            listing.save()
+            message = "Listing Successfully Added"
+        return HttpResponseRedirect(reverse("index") + '?message=' + message)
+    else:
+        categories = []
+        for category in Items.CATEGORIES:
+            categories.append(category[1])
+        return render(request, "auctions/createlisting.html", {
+            "categories" : categories,
+            "users" : User.objects.all()
+        })
