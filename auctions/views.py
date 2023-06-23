@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from .models import *
-from decimal import Decimal
 from .models import User
 
 def index(request):
@@ -74,20 +73,22 @@ def createListings(request):
     if request.method == "POST":
         title = request.POST["title"]
         description = request.POST["description"]
-        image = request.POST["image"]
-        startingPrice = request.POST["startingPrice"]
+        image = request.FILES.get("image")
+        startingPrice = float(request.POST["startingPrice"])
         category = request.POST["category"].strip().lower()
-        print(category)
         user = request.user
         user = User.objects.get(username=user)
 
         if not title or not description or not image or not startingPrice or not category:
             message = "Error Creating Listing: Details Missing"
-        elif not (isinstance(title, str) and isinstance(description, str) and isinstance(startingPrice, Decimal)):
+        elif not (isinstance(title, str) and isinstance(description, str) and isinstance(startingPrice, float)):
             message = "Error Creating Listing: Illegal Details Submitted"
         else:
             listing = Items(Title=title, Description=description, Image=image, Starting_price=startingPrice, Seller=user, Category=category)
             listing.save()
+            listing = Items.objects.get(id=listing.id)
+            active = ActiveItems(Item=listing, Current_price=startingPrice)
+            active.save()
             message = "Listing Successfully Added"
         return HttpResponseRedirect(reverse("index") + '?message=' + message)
     else:

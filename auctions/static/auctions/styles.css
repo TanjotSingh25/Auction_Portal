@@ -161,3 +161,18 @@ body {
     text-align: center;
     margin-top: 1.2rem;
 }
+
+#Items-flex{
+    display: flex;
+    flex-direction: row;
+}
+
+#item-box{
+    border: solid 1px;
+    border-radius: 15px;
+}
+
+#item-box-grid{
+    display: grid;
+    grid-template-columns: auto auto;
+}

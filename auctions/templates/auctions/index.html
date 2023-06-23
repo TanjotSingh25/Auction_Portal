@@ -1,7 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+{% load static %}
+
     <h1 id="Page-Heading">Active Listings</h1>
     <h4 id="message-small">{{ Message }}</h4>
     
+    <div id="Items-flex">
+        {% for item in Items %}
+            <div class="item-box">
+                <div class="item-box-grid">
+                    <img src="{{ item.Image.url }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

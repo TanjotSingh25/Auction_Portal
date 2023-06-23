@@ -9,7 +9,7 @@
     </head>
     <body>
         <div id="Header-flex">
-            <div id="img-div"><img src="{% static 'auctions/AuctionHub.png' %}" id="logo-auctionhub"></div>
+            <a id="img-div" href="{% url 'index' %}"><img src="{% static 'auctions/AuctionHub.png' %}" id="logo-auctionhub"></a>
             {% if user.is_authenticated %}
                 <a class="navlink hidden" href="">Log In</a>
                 <a class="navlink" href="{% url 'logout' %}">Log Out</a>

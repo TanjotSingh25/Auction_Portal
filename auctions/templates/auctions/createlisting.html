@@ -3,7 +3,7 @@
 {% block body %}
     <h1 id="Page-Heading">Create Listings</h1>
 
-    <form id="createListing" action="{% url 'createListings' %}" method="POST">
+    <form id="createListing" action="{% url 'createListings' %}" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <label for="title" class="createListingElements">Title</label>
         <input type="text" name="title" id="title" class="createListingElements lineHeightMed smallFont" required>

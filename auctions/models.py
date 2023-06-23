@@ -15,28 +15,28 @@ class Items(models.Model):
 
     Title = models.CharField(max_length=100)
     Description = models.TextField()
-    Image = models.ImageField()
+    Image = models.ImageField(upload_to='images/')
     Starting_price = models.DecimalField(max_digits=10, decimal_places=2)
     Seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Listings")
     Category = models.CharField(choices=CATEGORIES, max_length=100)
 
 class Bids(models.Model):
-    item = models.ManyToManyField(Items, related_name="Bids")
-    bid = models.DecimalField(max_digits=10, decimal_places=2)
-    bidder = models.ManyToManyField(User, related_name="Bidder")
-    time_bid = models.DateTimeField(auto_now_add=True)
+    Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="Bids")
+    Bid = models.DecimalField(max_digits=10, decimal_places=2)
+    Bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+    Time_bid = models.DateTimeField(auto_now_add=True)
 
 class Comments(models.Model):
-    item = models.ManyToManyField(Items, related_name="Comments")
-    comment = models.TextField()
-    time_commented = models.DateTimeField(auto_now_add=True)
+    Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="Comments")
+    Comment = models.TextField()
+    Time_commented = models.DateTimeField(auto_now_add=True)
 
 class ActiveItems(models.Model):
-    item = models.ManyToManyField(Items, related_name="ActiveItems")
-    current_price = models.DecimalField(max_digits=10, decimal_places=2)
-    date_uploaded = models.DateTimeField(auto_now_add=True)
+    Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="ActiveItems")
+    Current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    Date_uploaded = models.DateTimeField(auto_now_add=True)
 
 class InactiveItems(models.Model):
-    item = models.ManyToManyField(Items, related_name="InactiveItems")
-    sold_on = models.DateTimeField(auto_now_add=True)
+    Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="InactiveItems")
+    Sold_on = models.DateTimeField(auto_now_add=True)
 
