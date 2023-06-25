@@ -29,7 +29,19 @@
         </div>
         <div id="navigation-flex">
             <a href="{% url 'index' %}">Active Listings</a>
-            <a href="{% url 'index' %}">Categories</a>
+            <form method="POST" action="{% url 'index' %}" id="categories-form">
+                {% csrf_token %}
+                <select onchange="submitForm()" name="category">
+                    {% for category in categories %}
+                    <option value="{{ category.0 }}" {{ category.1 }}>{{ category.0 }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            <script>
+                function submitForm() {
+                    document.getElementById('categories-form').submit();
+                }
+            </script>
             <a href="{% url 'index' %}">WatchList</a>
             <a href="{% url 'createListings' %}">Create Listings</a>
             <a href="{% url 'index' %}">Previous Listings</a>

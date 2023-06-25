@@ -8,13 +8,44 @@ from .models import *
 from .models import User
 
 def index(request):
-    message = ''
-    if 'message' in request.GET:
-        message = request.GET.get('message')
-    return render(request, "auctions/index.html", {
-        "Message" : message,
-        "Items" : Items.objects.all()
-    })
+    if request.method == "POST":
+        category_selected = request.POST["category"]
+        if category_selected.lower() == "categories":
+            categories = [("Categories", "selected")]
+            for category in Items.CATEGORIES:
+                categories.append((category[1], ""))
+            return render(request, "auctions/index.html", {
+                "Items" : ActiveItems.objects.all(),
+                "categories" : categories
+            })
+        items = ActiveItems.objects.all()
+        category_to_display = []
+        for i in range(len(items)):
+            item_category = items[i].Item.Category
+            if item_category.lower() == category_selected.lower():
+                category_to_display.append(items[i])
+        categories = [("Categories", "")]
+        for category in Items.CATEGORIES:
+            if category[1].lower() == category_selected.lower():
+                categories.append((category[1], "selected"))
+            else:
+                categories.append((category[1], ""))
+        return render(request, "auctions/index.html", {
+            "Items" : category_to_display,
+            "categories" : categories
+        })
+    else:
+        message = ''
+        if 'message' in request.GET:
+            message = request.GET.get('message')
+        categories = [("Categories", "selected")]
+        for category in Items.CATEGORIES:
+            categories.append((category[1], ""))
+        return render(request, "auctions/index.html", {
+            "Message" : message,
+            "Items" : ActiveItems.objects.all(),
+            "categories" : categories
+        })
 
 
 def login_view(request):
@@ -87,7 +118,7 @@ def createListings(request):
             listing = Items(Title=title, Description=description, Image=image, Starting_price=startingPrice, Seller=user, Category=category)
             listing.save()
             listing = Items.objects.get(id=listing.id)
-            active = ActiveItems(Item=listing, Current_price=startingPrice)
+            active = ActiveItems(Item=listing, Current_Price=startingPrice)
             active.save()
             message = "Listing Successfully Added"
         return HttpResponseRedirect(reverse("index") + '?message=' + message)
@@ -99,3 +130,6 @@ def createListings(request):
             "categories" : categories,
             "users" : User.objects.all()
         })
+    
+def openListing(request, listing):
+    return render(request, "auctions/listing.html")

@@ -33,7 +33,7 @@ class Comments(models.Model):
 
 class ActiveItems(models.Model):
     Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="ActiveItems")
-    Current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    Current_Price = models.DecimalField(max_digits=10, decimal_places=2)
     Date_uploaded = models.DateTimeField(auto_now_add=True)
 
 class InactiveItems(models.Model):

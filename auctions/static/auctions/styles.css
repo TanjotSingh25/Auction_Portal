@@ -81,12 +81,21 @@ body {
     padding: 0.5rem 1.5rem;
 }
 
+#navigation-flex select{
+    color: #dd354e;
+    text-decoration: none;
+    font-size: 1.7rem;
+    background-color: #000000ba;
+    box-shadow: 0 0 2px 2px gray;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+}
+
 #Page-Heading{
     text-align: center;
     margin-top: 0.8rem;
     border-top: solid #dd354e91;
     padding-top: 1.5rem;
-    padding-right: 1rem;
 }
 
 #login-form{
@@ -164,15 +173,83 @@ body {
 
 #Items-flex{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    margin: 2rem;
 }
 
-#item-box{
-    border: solid 1px;
+.item-box{
+    border: solid 2px gray;
+    border-radius: 15px;
+    background-color: #000000ba;
+}
+
+.item-box-grid{
+    display: grid;
+    grid-template-columns: 25% 75%;
+    margin: 1.5rem;
+}
+
+.item-image{
+    width: 100%;
     border-radius: 15px;
 }
 
-#item-box-grid{
+.details-box{
+    text-align: center;
+    padding: 1rem;
+}
+
+.description-listing{
+    font-size: 1.5rem;
+}
+
+.title-listing{
+    font-size: 3rem;
+}
+
+.category-listing{
+    font-size: 1.3rem;
+}
+
+.details-grid{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
+    grid-template-rows: 80% 10% 10%;
+}
+
+.details-footer{
+    color: gainsboro;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    font-size: 1rem;
+}
+
+.details-footer h6{
+    font-size: 1.1rem;
+}
+
+.item-link{
+    text-decoration: none;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.item-link:hover{
+    text-decoration: none;
+    color: white;
+}
+
+.price-listing{
+    text-align: center;
+}
+
+#Page-Heading{
+    font-size: 3.5rem;
+}
+
+#categories-form select{
+    padding: 0.7rem 1.5rem;
+    box-shadow: 0 0 1px 1px gray;
 }

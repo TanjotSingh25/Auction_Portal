@@ -8,5 +8,9 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("createListings", views.createListings, name="createListings")
+    path("createListings", views.createListings, name="createListings"),
+    path("<str:listing>", views.openListing, name="openListing")
 ]
+
+if settings.DEBUG: # new
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

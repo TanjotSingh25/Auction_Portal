@@ -8,11 +8,27 @@
     
     <div id="Items-flex">
         {% for item in Items %}
-            <div class="item-box">
-                <div class="item-box-grid">
-                    <img src="{{ item.Image.url }}">
+            <a href="{% url 'openListing' listing=item.id %}" class="item-link">
+                <div class="item-box">
+                    <div class="item-box-grid">
+                        <img src="{{ item.Item.Image.url }}" class="item-image">
+                        <div class="details-grid">
+                            <div class="details-box">
+                                <h1 class="title-listing">{{ item.Item.Title }}</h1>
+                                <p class="category-listing">({{ item.Item.Category|title }})</p>
+                                <p class="description-listing">{{ item.Item.Description }}</p>
+                            </div>
+                            <div class="price-listing">
+                                <h2>Current Price:&nbsp&nbsp${{item.Current_Price}}</h2>
+                            </div>
+                            <div class="details-footer">
+                                <h6><b>Created:</b> {{ item.Date_uploaded }}</h6>
+                                <h6><b>Listed By:&nbsp&nbsp</b> {{ item.Item.Seller }}</h6>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}
