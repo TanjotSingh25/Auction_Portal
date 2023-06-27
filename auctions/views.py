@@ -154,15 +154,17 @@ def openListing(request, listing_id):
                     activeItem.save()
                     bidder = Bids(Item=activeItem.Item, Bid=bid, Bidder=user)
                     bidder.save()
+                    watchlist_item = WatchList(Item=activeItem.Item, User=user)
+                    watchlist_item.save()
                     message = "Your bid has successfully been registered."
         return HttpResponseRedirect(reverse("index") + '?message=' + message)
     else:
         owner = False
-        listing_info = ActiveItems.objects.get(Item=Items.objects.get(Item_id=int(listing_id)))
+        listing_info = ActiveItems.objects.get(Item=Items.objects.get(Item_id=listing_id))
         user = request.user
         current_user = User.objects.get(username=user)
         notOnWatch = True
-        if WatchList.objects.filter(Item=listing_info.Item).exists():
+        if WatchList.objects.filter(Item=listing_info.Item, User=current_user).exists():
             notOnWatch = False
         if listing_info.Item.Seller == current_user:
             print("Yes")
@@ -191,7 +193,24 @@ def addToWatchList(request, listing_id):
     item = Items.objects.get(Item_id=int(listing_id))
     user = request.user
     user = User.objects.get(username=user)
-    if not WatchList.objects.filter(Item=item).exists():
+    if not WatchList.objects.filter(Item=item, User=user).exists():
         watchlist_item = WatchList(Item=item, User=user)
         watchlist_item.save()
     return HttpResponseRedirect(reverse("openListing", args=[listing_id]))
+
+
+def watchlist(request):
+    user = request.user
+    user = User.objects.get(username=user)
+    watchlist_items = WatchList.objects.filter(User=user)
+    Items = []
+    for item in watchlist_items:
+        if ActiveItems.objects.filter(Item=item.Item).exists():
+            tuple = (ActiveItems.objects.get(Item=item.Item), True, "")
+            Items.append(tuple)
+        else:
+            tuple = (InactiveItems.objects.get(Item=item.Item), False, 'style=pointer-events:none;')
+            Items.append(tuple)
+    return render(request, "auctions/watchlist.html", {
+        "Items" : Items
+    })
