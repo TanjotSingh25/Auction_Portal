@@ -18,7 +18,7 @@
                         <form action="{% url 'closeListing' %}" method="POST" id="owner">
                             {% csrf_token %}
                             <input type="number" value="{{ listing.Item.Item_id }}" hidden name="id">
-                            <input type="submit" value="Close Listing" id="closeListing" form="owner">
+                            <input type="submit" value="Close Listing" class="big-red-btn" form="owner">
                         </form>
                     {% else %}
                         <form action="{% url 'openListing' listing_id=listing.Item.Item_id %}" method="POST" id="form-bid">
@@ -34,7 +34,9 @@
                 <h6><b>Created:</b> {{ listing.Date_uploaded }}</h6>
                 <h6><b>Listed By:&nbsp&nbsp</b> {{ listing.Item.Seller }}</h6>
             </div>
-            
+            {% if notOnWatch %}
+                <a class="big-red-btn listing-items" id="addToWatch" href="{% url 'addToWatchList' listing_id=listing.Item.Item_id %}">Add to WatchList</a>
+            {% endif %}
         </div>
     </div>
 

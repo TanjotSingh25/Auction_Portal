@@ -161,6 +161,9 @@ def openListing(request, listing_id):
         listing_info = ActiveItems.objects.get(Item=Items.objects.get(Item_id=int(listing_id)))
         user = request.user
         current_user = User.objects.get(username=user)
+        notOnWatch = True
+        if WatchList.objects.filter(Item=listing_info.Item).exists():
+            notOnWatch = False
         if listing_info.Item.Seller == current_user:
             print("Yes")
             owner = True
@@ -168,7 +171,8 @@ def openListing(request, listing_id):
         return render(request, "auctions/listing.html", {
             "listing" : listing_info,
             "bids_count" : bids_count,
-            "owner" : owner
+            "owner" : owner,
+            "notOnWatch" : notOnWatch
         })
     
 
@@ -181,3 +185,13 @@ def closeListing(request):
         item.delete()
         message = "Listing Successfully Closed"
     return HttpResponseRedirect(reverse("index") + '?message=' + message)
+
+
+def addToWatchList(request, listing_id):
+    item = Items.objects.get(Item_id=int(listing_id))
+    user = request.user
+    user = User.objects.get(username=user)
+    if not WatchList.objects.filter(Item=item).exists():
+        watchlist_item = WatchList(Item=item, User=user)
+        watchlist_item.save()
+    return HttpResponseRedirect(reverse("openListing", args=[listing_id]))
