@@ -6,6 +6,7 @@ from django.urls import reverse
 from django import forms
 from .models import *
 from .models import User
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     if request.method == "POST":
@@ -16,7 +17,7 @@ def index(request):
                 categories.append((category[1], ""))
             return render(request, "auctions/index.html", {
                 "Items" : ActiveItems.objects.all(),
-                "categories" : categories
+                "categories_navigation" : categories
             })
         items = ActiveItems.objects.all()
         category_to_display = []
@@ -32,7 +33,7 @@ def index(request):
                 categories.append((category[1], ""))
         return render(request, "auctions/index.html", {
             "Items" : category_to_display,
-            "categories" : categories
+            "categories_navigation" : categories
         })
     else:
         message = ''
@@ -100,6 +101,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+@login_required
 def createListings(request):
     if request.method == "POST":
         title = request.POST["title"]
@@ -132,6 +134,7 @@ def createListings(request):
         })
     
 
+@login_required
 def openListing(request, listing_id):
     print(request)
     if request.method == "POST":
@@ -178,6 +181,7 @@ def openListing(request, listing_id):
         })
     
 
+@login_required
 def closeListing(request):
     if request.method == "POST":
         id = int(request.POST["id"])
@@ -189,6 +193,7 @@ def closeListing(request):
     return HttpResponseRedirect(reverse("index") + '?message=' + message)
 
 
+@login_required
 def addToWatchList(request, listing_id):
     item = Items.objects.get(Item_id=int(listing_id))
     user = request.user
@@ -199,10 +204,11 @@ def addToWatchList(request, listing_id):
     return HttpResponseRedirect(reverse("openListing", args=[listing_id]))
 
 
+@login_required
 def watchlist(request):
     user = request.user
     user = User.objects.get(username=user)
-    watchlist_items = WatchList.objects.filter(User=user)
+    watchlist_items = user.WatchList.all()
     Items = []
     for item in watchlist_items:
         if ActiveItems.objects.filter(Item=item.Item).exists():
@@ -210,6 +216,24 @@ def watchlist(request):
             Items.append(tuple)
         else:
             tuple = (InactiveItems.objects.get(Item=item.Item), False, 'style=pointer-events:none;')
+            Items.append(tuple)
+    return render(request, "auctions/watchlist.html", {
+        "Items" : Items
+    })
+
+
+@login_required
+def myListings(request):
+    user = request.user
+    user = User.objects.get(username=user)
+    my_items = user.Listings.all()
+    Items = []
+    for item in my_items:
+        if ActiveItems.objects.filter(Item=item).exists():
+            tuple = (ActiveItems.objects.get(Item=item), True, "")
+            Items.insert(0, tuple)
+        else:
+            tuple = (InactiveItems.objects.get(Item=item), False, 'style=pointer-events:none;')
             Items.append(tuple)
     return render(request, "auctions/watchlist.html", {
         "Items" : Items
