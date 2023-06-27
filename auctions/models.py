@@ -29,6 +29,7 @@ class Bids(models.Model):
 
 class Comments(models.Model):
     Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="Comments")
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
     Comment = models.TextField()
     Time_commented = models.DateTimeField(auto_now_add=True)
 

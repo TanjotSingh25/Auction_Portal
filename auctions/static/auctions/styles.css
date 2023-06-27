@@ -383,3 +383,39 @@ body {
     font-size: 1.3rem;
     text-decoration: none;
 }
+
+#form-comments{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#comment-div{
+    width: 100%;
+    display: none;
+}
+
+#comment-text{
+    width: 100%;
+    border-radius: 10px;
+    margin: 2rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+#comment-submit{
+    padding: 0.5rem 3rem;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    border: 0px;
+    background-color: #0d7bff;
+}
+
+#addCommentLink{
+    color: #007bff;
+}
+
+#addCommentLink:hover{
+    color: #007bff9a;
+    cursor: pointer;
+}

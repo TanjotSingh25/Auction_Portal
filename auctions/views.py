@@ -136,7 +136,6 @@ def createListings(request):
 
 @login_required
 def openListing(request, listing_id):
-    print(request)
     if request.method == "POST":
         bid = request.POST["bid"]
         if not bid:
@@ -173,11 +172,14 @@ def openListing(request, listing_id):
             print("Yes")
             owner = True
         bids_count = len(listing_info.Item.Bids.all())
+        comments = listing_info.Item.Comments.all()
         return render(request, "auctions/listing.html", {
             "listing" : listing_info,
             "bids_count" : bids_count,
             "owner" : owner,
-            "notOnWatch" : notOnWatch
+            "notOnWatch" : notOnWatch,
+            "comment_form" : False,
+            "Comments" : comments
         })
     
 
@@ -238,3 +240,13 @@ def myListings(request):
     return render(request, "auctions/watchlist.html", {
         "Items" : Items
     })
+
+
+def addComment(request, listing_id):
+    item = Items.objects.get(Item_id = listing_id)
+    user = request.user
+    user = User.objects.get(username=user)
+    comment_text = request.POST["comment"]
+    comment = Comments(Item=item, User=user, Comment=comment_text)
+    comment.save()
+    return HttpResponseRedirect(reverse("openListing", args=[listing_id]))
