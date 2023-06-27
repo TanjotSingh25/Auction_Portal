@@ -8,7 +8,7 @@
     
     <div id="Items-flex">
         {% for item in Items %}
-            <a href="{% url 'openListing' listing=item.id %}" class="item-link">
+            <a href="{% url 'openListing' listing_id=item.Item.Item_id %}" class="item-link">
                 <div class="item-box">
                     <div class="item-box-grid">
                         <img src="{{ item.Item.Image.url }}" class="item-image">
@@ -19,7 +19,7 @@
                                 <p class="description-listing">{{ item.Item.Description }}</p>
                             </div>
                             <div class="price-listing">
-                                <h2>Current Price:&nbsp&nbsp${{item.Current_Price}}</h2>
+                                <h2>Highiest Bid:&nbsp&nbsp${{item.Highiest_Bid}}</h2>
                             </div>
                             <div class="details-footer">
                                 <h6><b>Created:</b> {{ item.Date_uploaded }}</h6>

@@ -13,6 +13,7 @@ class Items(models.Model):
         ('collectibles', 'Collectibles')
     ]
 
+    Item_id = models.AutoField(primary_key=True)
     Title = models.CharField(max_length=100)
     Description = models.TextField()
     Image = models.ImageField(upload_to='images/')
@@ -33,10 +34,14 @@ class Comments(models.Model):
 
 class ActiveItems(models.Model):
     Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="ActiveItems")
-    Current_Price = models.DecimalField(max_digits=10, decimal_places=2)
+    Highiest_Bid = models.DecimalField(max_digits=10, decimal_places=2)
     Date_uploaded = models.DateTimeField(auto_now_add=True)
 
 class InactiveItems(models.Model):
     Item = models.ForeignKey(Items, on_delete=models.CASCADE, related_name="InactiveItems")
+    Final_Price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     Sold_on = models.DateTimeField(auto_now_add=True)
 
+class WatchList(models.Model):
+    Item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE, related_name="WatchList")

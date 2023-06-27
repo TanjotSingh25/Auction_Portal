@@ -253,3 +253,93 @@ body {
     padding: 0.7rem 1.5rem;
     box-shadow: 0 0 1px 1px gray;
 }
+
+#listing-header{
+    margin-top: 0.8rem;
+    border-top: solid #dd354e91;
+    padding-top: 1.5rem;
+}
+
+#listing-card{
+    text-align: center;
+    background-color: #000000ba;
+    margin: 2rem 2rem;
+    border-radius: 25px;
+    box-shadow: 0 0 2px 2px gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+
+#listing-card img{
+    width: 30%;
+}
+
+.listing-items{
+    margin: 1rem 0rem 0rem 0rem;
+}
+
+#listing-card h1{
+    font-size: 5rem;
+}
+
+#listing-details-flex{
+    display: flex;
+    justify-content: space-around;
+}
+
+.listing-desc{
+    margin: 2rem 2rem 0rem 2rem;
+    font-size: 1.5rem;
+}
+
+#bidding-div{
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.bidding-item{
+    align-self: center;
+}
+
+#bidding-form-number{
+    width: 15rem;
+    line-height: 2.5rem;
+    font-size: 1.5rem;
+    margin: 0 1rem;
+    border-radius: 10px;
+    padding-left: 0.5rem;
+}
+
+#bidding-form-submit{
+    width: 7rem;
+    border-radius: 10px;
+    background-color: #0d7bff;
+    border: 0px;
+    font-size: 1.1rem;
+}
+
+#form-bid{
+    display: flex;
+}
+
+#listing-details{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#closeListing{
+    color: #dd354e;
+    text-decoration: none;
+    font-size: 1.7rem;
+    background-color: #000000ba;
+    box-shadow: 0 0 2px 2px gray;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    border: 0px;
+}

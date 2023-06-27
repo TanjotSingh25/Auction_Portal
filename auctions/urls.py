@@ -9,7 +9,9 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("createListings", views.createListings, name="createListings"),
-    path("<str:listing>", views.openListing, name="openListing")
+    path("closeListing", views.closeListing, name="closeListing"),
+    path("<str:listing_id>", views.openListing, name="openListing")
+    
 ]
 
 if settings.DEBUG: # new

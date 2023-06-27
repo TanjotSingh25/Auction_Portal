@@ -44,7 +44,7 @@ def index(request):
         return render(request, "auctions/index.html", {
             "Message" : message,
             "Items" : ActiveItems.objects.all(),
-            "categories" : categories
+            "categories_navigation" : categories
         })
 
 
@@ -117,8 +117,8 @@ def createListings(request):
         else:
             listing = Items(Title=title, Description=description, Image=image, Starting_price=startingPrice, Seller=user, Category=category)
             listing.save()
-            listing = Items.objects.get(id=listing.id)
-            active = ActiveItems(Item=listing, Current_Price=startingPrice)
+            listing = Items.objects.get(Item_id=listing.Item_id)
+            active = ActiveItems(Item=listing, Highiest_Bid=startingPrice)
             active.save()
             message = "Listing Successfully Added"
         return HttpResponseRedirect(reverse("index") + '?message=' + message)
@@ -131,5 +131,53 @@ def createListings(request):
             "users" : User.objects.all()
         })
     
-def openListing(request, listing):
-    return render(request, "auctions/listing.html")
+
+def openListing(request, listing_id):
+    print(request)
+    if request.method == "POST":
+        bid = request.POST["bid"]
+        if not bid:
+            message = "Error Bidding: Amount Missing"
+        else:
+            try:
+                bid = float(bid)
+            except:
+                message = "Error Bidding: Amount is of wrong format"
+            else:
+                user = request.user
+                user = User.objects.get(username=user)
+                activeItem = ActiveItems.objects.get(Item=Items.objects.get(Item_id=int(listing_id)))
+                if activeItem.Highiest_Bid >= bid:
+                    message = "Your bid cannot be less or equal than the Current Highiest Bid."
+                else:
+                    activeItem.Highiest_Bid = bid
+                    activeItem.save()
+                    bidder = Bids(Item=activeItem.Item, Bid=bid, Bidder=user)
+                    bidder.save()
+                    message = "Your bid has successfully been registered."
+        return HttpResponseRedirect(reverse("index") + '?message=' + message)
+    else:
+        owner = False
+        listing_info = ActiveItems.objects.get(Item=Items.objects.get(Item_id=int(listing_id)))
+        user = request.user
+        current_user = User.objects.get(username=user)
+        if listing_info.Item.Seller == current_user:
+            print("Yes")
+            owner = True
+        bids_count = len(listing_info.Item.Bids.all())
+        return render(request, "auctions/listing.html", {
+            "listing" : listing_info,
+            "bids_count" : bids_count,
+            "owner" : owner
+        })
+    
+
+def closeListing(request):
+    if request.method == "POST":
+        id = int(request.POST["id"])
+        item = ActiveItems.objects.get(Item=Items.objects.get(Item_id=id))
+        inactiveItem = InactiveItems(Item=item.Item, Final_Price=item.Highiest_Bid)
+        inactiveItem.save()
+        item.delete()
+        message = "Listing Successfully Closed"
+    return HttpResponseRedirect(reverse("index") + '?message=' + message)

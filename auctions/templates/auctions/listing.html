@@ -3,6 +3,39 @@
 {% block body %}
 {% load static %}
 
-    
+    <div id="listing-header">
+        <div id="listing-card">
+            <h1 class="listing-items">{{ listing.Item.Title }}</h1>
+            <img src="{{ listing.Item.Image.url }}" class="item-image listing-items">
+            <h5 class="listing-desc listing-items">{{ listing.Item.Description }}</h5>
+            <div id="bidding-div" class="listing-items">
+                <div class="bidding-item">
+                    <h2 class="listing-items">Highiest Bid: &nbsp&nbsp${{ listing.Highiest_Bid }}</h2>
+                    <h2 class="listing-items">Initial Price: &nbsp&nbsp${{ listing.Item.Starting_price }}</h2>
+                </div>
+                <div class="bidding-item">
+                    {% if owner %}
+                        <form action="{% url 'closeListing' %}" method="POST" id="owner">
+                            {% csrf_token %}
+                            <input type="number" value="{{ listing.Item.Item_id }}" hidden name="id">
+                            <input type="submit" value="Close Listing" id="closeListing" form="owner">
+                        </form>
+                    {% else %}
+                        <form action="{% url 'openListing' listing_id=listing.Item.Item_id %}" method="POST" id="form-bid">
+                            {% csrf_token %}
+                            <input type="number" name="bid" min="0.01" step="0.01" id="bidding-form-number" required>
+                            <input type="submit" value="Place Bid" id="bidding-form-submit" form="form-bid">
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <h6 class="listing-items">{{ bids_count }} bid(s) so far. Your bid is the current bid.</h6>
+            <div id="listing-details" class="listing-items">
+                <h6><b>Created:</b> {{ listing.Date_uploaded }}</h6>
+                <h6><b>Listed By:&nbsp&nbsp</b> {{ listing.Item.Seller }}</h6>
+            </div>
+            
+        </div>
+    </div>
 
 {% endblock %}
