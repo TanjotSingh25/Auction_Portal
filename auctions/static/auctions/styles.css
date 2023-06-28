@@ -419,3 +419,34 @@ body {
     color: #007bff9a;
     cursor: pointer;
 }
+
+#comments-all{
+    width: 100%;
+}
+
+.comment-box{
+    width: 100%;
+    border-radius: 0 15px 15px 15px;
+    background-color: white;
+    padding: 0.5rem;
+    resize: none;
+}
+
+.comment-user{
+    width: 12%;
+    border-radius: 15px 15px 0 0;
+    padding: 0.5rem;
+    resize: none;
+    background-color: #dd354e;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.comment-div{
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    margin-top: 2rem;
+}

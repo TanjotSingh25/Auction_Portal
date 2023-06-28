@@ -64,7 +64,10 @@
         </div>
         <div id="comments-all">
             {% for comment in Comments %}
-                <textarea disabled>{{ comment.Comment }}</textarea>
+                <div class="comment-div">
+                    <textarea disabled rows="1" class="comment-user">{{ comment.User.username }}</textarea>
+                    <textarea disabled class="comment-box">{{ comment.Comment }}</textarea>
+                </div>
             {% endfor %}
         </div>
     </div>
